@@ -1,2 +1,0 @@
-# CarouselAnimations
-Created with CodeSandbox
