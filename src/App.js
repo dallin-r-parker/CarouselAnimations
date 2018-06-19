@@ -8,33 +8,72 @@ class App extends Component {
   constructor() {
     super();
 
-    this.state = { animatedClass: null };
+    this.state = {
+      xActiveItem: 0,
+      yActiveItem: 0
+    }
+
   }
 
-  handleAnimation(evt) {
-    this.setState({ animateClass: "input-focused" });
+  handleLeftNav() {
+    const { xActiveItem } = this.state;
+    this.setState({ xActiveItem: xActiveItem - 1 })
   }
-  handleBlur() {
-    this.setState({ animateClass: null });
+
+  handleRightNav() {
+    const { xActiveItem } = this.state;
+    this.setState({ xActiveItem: xActiveItem + 1 })
   }
+
+  // handleUpNav() {
+  //   const { yActiveItem } = this.state;
+  //   this.setState({ yActiveItem: yActiveItem - 1 })
+  // }
+
+  // handleDownNav() {
+  //   const { yActiveItem } = this.state;
+  //   this.setState({ yActiveItem: yActiveItem + 1 })
+  // }
+
+  // <BtnNav onClick={this.handleUpNav.bind(this)}>UP</BtnNav>
+  // <BtnNav onClick={this.handleDownNav.bind(this)}>DOWN</BtnNav>
 
   render() {
     return (
-      <React.Fragment>
-        <Carousel />
-        <Carousel />
-      </React.Fragment>
+      <Carousels>
+        <CollectionGenre>
+          <Carousel
+            xActiveItem={this.state.xActiveItem}
+            yActiveItem={this.state.yActiveItem}
+            genre={'ADVENTURE'} />
+          <BtnWrap>
+            <BtnNav onClick={this.handleLeftNav.bind(this)}>LEFT</BtnNav>
+            <BtnNav onClick={this.handleRightNav.bind(this)}>RIGHT</BtnNav>
+          </BtnWrap>
+        </CollectionGenre>
+      </Carousels>
     );
   }
 }
 
 export default App;
 
-// const AppContainer = styled.div`
-//   filter: blur(10px);
-//   position: absolute;
-//   z-index: -55;
-//   width: 1920px;
-//   height: 710px;
-//   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f48024);
-// `;
+const Carousels = styled.div`
+  color: #efefef;
+  font-family: Arial;
+  background: lightgray;
+
+`;
+
+const BtnWrap = styled.div`
+  display: flex;
+  margin: 0 auto;
+  width: 20%;
+`
+
+const BtnNav = styled.button`
+  margin-top: 5px;
+  width: 130px;
+`
+
+const CollectionGenre = styled.h3``;
