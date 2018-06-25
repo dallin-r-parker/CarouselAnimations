@@ -3,7 +3,11 @@ import React, {Component} from "react";
 import Carousel from "./Carousel";
 import styled from "styled-components";
 // import CSSanimation from "./CSSanimations";
-import {collection} from "./collection";
+import { collection } from "./collection";
+import { Rx } from 'rxjs/Rx'
+
+
+const pixelsPerSeconds = v => ms => v * ms / 1000;
 
 class App extends Component {
 	constructor() {
@@ -18,27 +22,33 @@ class App extends Component {
 			futureCarouselItems: [],
 			totalCarouselItems: collection.length,
 			lastVisibleIndex: 3,
-			indexForNextFetch: 2
+			firstFetch: true,
+			ball: null
 		};
 
 		this.removeCarouselItem = this.removeCarouselItem.bind(this);
 	}
+	componentDidMount() {
+		let ball = document.querySelector('.ball');
+		this.setState((prevState) => ({ ball }));
+	}
 
-	// static getDerivedStateFromProps(props, state) {
-	// 	console.log('getDerivedStateFromProps: ', props);
-	// 	console.log('getDerivedStateFromProps state: ', state);
-	// 	return null
-	// }
+	static getDerivedStateFromProps(props, state) {
+		// console.log('getDerivedStateFromProps: ', props);
+		// console.warn('getDerivedStateFromProps state: ', state);
+		return null
+	}
 	//
-	// getSnapshotBeforeUpdate(prevProps, prevState) {
-	// 	// console.log('getSnapshotBeforeUpdate: prevProps', prevProps);
-	// 	// console.log('getSnapshotBeforeUpdate prevState: ', prevState);
-	// 	// return null
-	// }
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+		// console.log('getSnapshotBeforeUpdate: prevProps', prevProps);
+		// console.log('getSnapshotBeforeUpdate prevState: ', prevState);
+		return null
+	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		//TODO: this is where I should trigger off the animation for the shift of the collection
 		// console.log('componentDidUpdate prevProps: ', prevProps);
-		// console.warn('componentDidUpdate prevState: ', this.state);
+		// console.warn('componentDidUpdate prevState: ', prevState);
 		// console.log('componentDidUpdate snapshot: ', snapshot);
 	}
 
@@ -48,13 +58,31 @@ class App extends Component {
 
 	handleRightNav() {
 		//when I get to the indexForNextFetch i need to start removing
-		this.setState((prevState) => {
-			if (this.state.xActiveItem === prevState.indexForNextFetch) {
-				return {xActiveItem: prevState.xActiveItem + 1, futureCarouselItems: collection.pageTwo}
-			} else {
-				return {xActiveItem: prevState.xActiveItem + 1}
-			}
-		});
+		//TODO: ANOTHER CONDITION TO FETCH IS WHEN FUTURE CAROUSEL ITEM.LENGTH IS LESS 3 ITEMS
+
+		if(this.state.futureCarouselItems.length <= 0) {
+			this.setState(prevState => ({xActiveItem: prevState.xActiveItem++, futureCarouselItems: [...collection.pageTwo]}));
+		}
+			this.setState((prevState) => {
+				if (this.state.xActiveItem === prevState.lastVisibleIndex) {
+					const newVisibleItems = [...prevState.visibleCarouselItems];
+					let removedVisibleItem = newVisibleItems.splice(0, 1);
+
+					const newFutureCarouselItems = [...prevState.futureCarouselItems];
+					let removedFutureCarouselItems = newFutureCarouselItems.splice(0, 1);
+					newVisibleItems.concat(removedFutureCarouselItems);
+					// console.log('newVisItems: ', newVisibleItems);
+					//TODO: WHEN removing and adding it skips two items in the array because the indexes are off.
+					return {
+						visibleCarouselItems: [...newVisibleItems, ...removedFutureCarouselItems],
+						futureCarouselItems: [...newFutureCarouselItems],
+						previousCarouselItems: [...prevState.previousCarouselItems, ...removedVisibleItem],
+						xActiveItem: prevState.xActiveItem--,
+					}
+				} else {
+					return {xActiveItem: prevState.xActiveItem + 1}
+				}
+			});
 
 	}
 
@@ -68,6 +96,26 @@ class App extends Component {
 
 	componentDidCatch() {
 		//TODO: LOOK INTO ERROR BOUNDARIES
+	}
+
+	handleStopAnimation() {
+		this.msElapsed.unsubscribe();
+	}
+
+	handleAnimation() {
+		this.msElapsed()
+			.map(pixelsPerSeconds(10))
+			.subscribe(frames => (this.ball.style.transform = `translate3d(0, ${frames}px, 0)`));
+
+	}
+	
+	msElapsed(scheduler = Rx.Scheduler.animationFrame) {
+		Rx.Observable.defer(() => {
+			const start = scheduler.now();
+
+			return Rx.Observable.interval(0, scheduler)
+				.map(() => scheduler.now() - start)
+		})
 	}
 
 	// handleUpNav() {
@@ -84,8 +132,9 @@ class App extends Component {
 	// <BtnNav onClick={this.handleDownNav.bind(this)}>DOWN</BtnNav>
 
 	render() {
-		// console.count('App renders');
+		console.log(this.state);
 		return (
+			<React.Fragment>
 				<Carousels>
 					<CollectionGenre>
 						<Carousel
@@ -97,9 +146,13 @@ class App extends Component {
 						<BtnWrap>
 							<BtnNav onClick={this.handleLeftNav.bind(this)}>LEFT</BtnNav>
 							<BtnNav onClick={this.handleRightNav.bind(this)}>RIGHT</BtnNav>
+							// <BtnNav onClick={this.handleAnimation.bind(this)}>ANIMATE</BtnNav>
+							// <BtnNav onClick={this.handleStopAnimation.bind(this)}>STOP ANIMATION</BtnNav>
 						</BtnWrap>
 					</CollectionGenre>
 				</Carousels>
+				<div className="ball" style={{height: '100px', width: '100px', background: 'blue'}}/>
+			</React.Fragment>
 		);
 	}
 }
