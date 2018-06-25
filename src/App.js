@@ -18,27 +18,28 @@ class App extends Component {
 			futureCarouselItems: [],
 			totalCarouselItems: collection.length,
 			lastVisibleIndex: 3,
-			indexForNextFetch: 2
+			firstFetch: true
 		};
 
 		this.removeCarouselItem = this.removeCarouselItem.bind(this);
 	}
 
-	// static getDerivedStateFromProps(props, state) {
-	// 	console.log('getDerivedStateFromProps: ', props);
-	// 	console.log('getDerivedStateFromProps state: ', state);
-	// 	return null
-	// }
+	static getDerivedStateFromProps(props, state) {
+		// console.log('getDerivedStateFromProps: ', props);
+		// console.warn('getDerivedStateFromProps state: ', state);
+		return null
+	}
 	//
-	// getSnapshotBeforeUpdate(prevProps, prevState) {
-	// 	// console.log('getSnapshotBeforeUpdate: prevProps', prevProps);
-	// 	// console.log('getSnapshotBeforeUpdate prevState: ', prevState);
-	// 	// return null
-	// }
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+		// console.log('getSnapshotBeforeUpdate: prevProps', prevProps);
+		// console.log('getSnapshotBeforeUpdate prevState: ', prevState);
+		return null
+	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		//TODO: this is where I should trigger off the animation for the shift of the collection
 		// console.log('componentDidUpdate prevProps: ', prevProps);
-		// console.warn('componentDidUpdate prevState: ', this.state);
+		console.warn('componentDidUpdate prevState: ', prevState);
 		// console.log('componentDidUpdate snapshot: ', snapshot);
 	}
 
@@ -48,13 +49,31 @@ class App extends Component {
 
 	handleRightNav() {
 		//when I get to the indexForNextFetch i need to start removing
-		this.setState((prevState) => {
-			if (this.state.xActiveItem === prevState.indexForNextFetch) {
-				return {xActiveItem: prevState.xActiveItem + 1, futureCarouselItems: collection.pageTwo}
-			} else {
-				return {xActiveItem: prevState.xActiveItem + 1}
-			}
-		});
+		//TODO: ANOTHER CONDITION TO FETCH IS WHEN FUTURE CAROUSEL ITEM.LENGTH IS LESS 3 ITEMS
+
+		if(this.state.futureCarouselItems.length <= 0) {
+			this.setState(prevState => ({xActiveItem: prevState.xActiveItem++, futureCarouselItems: [...collection.pageTwo]}));
+		}
+			this.setState((prevState) => {
+				if (this.state.xActiveItem === prevState.lastVisibleIndex) {
+					const newVisibleItems = [...prevState.visibleCarouselItems];
+					let removedVisibleItem = newVisibleItems.splice(0, 1);
+
+					const newFutureCarouselItems = [...prevState.futureCarouselItems];
+					let removedFutureCarouselItems = newFutureCarouselItems.splice(0, 1);
+					newVisibleItems.concat(removedFutureCarouselItems);
+					// console.log('newVisItems: ', newVisibleItems);
+					//TODO: WHEN removing and adding it skips two items in the array because the indexes are off.
+					return {
+						visibleCarouselItems: [...newVisibleItems, ...removedFutureCarouselItems],
+						futureCarouselItems: [...newFutureCarouselItems],
+						previousCarouselItems: [...prevState.previousCarouselItems, ...removedVisibleItem],
+						xActiveItem: prevState.xActiveItem--,
+					}
+				} else {
+					return {xActiveItem: prevState.xActiveItem + 1}
+				}
+			});
 
 	}
 
@@ -84,7 +103,7 @@ class App extends Component {
 	// <BtnNav onClick={this.handleDownNav.bind(this)}>DOWN</BtnNav>
 
 	render() {
-		// console.count('App renders');
+		console.count('App renders');
 		return (
 				<Carousels>
 					<CollectionGenre>

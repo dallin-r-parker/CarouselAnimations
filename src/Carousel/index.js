@@ -4,12 +4,16 @@ import styled, {keyframes} from "styled-components";
 class Carousel extends Component {
   render() {
     const { xActiveItem, collection } = this.props;
-	  // console.count('Carousel render');
+    console.log('xActiveItem: ', xActiveItem === 3, typeof xActiveItem, xActiveItem);
+	  console.count('Carousel render');
+	  //TODO: THE ANIMATION IS RUINED WHEN ADDING/SUBTRACTING BECAUSE (xActiveItem === i) = FALSE
+	  //TODO: I need to trigger animation in componentDidUpdate right now it's too late, so when I start removing things
+	  // it make it seem like the animation isn't happening.
     return (
       <CarouselContainer>
         {collection.map(({ title, url }, i) => (
           <CarouselCollectionWrap key={i}>
-            <CarouselImg src={url} index={!!(xActiveItem === i)} />
+            <CarouselImg src={url} index={(xActiveItem === i)} />
             <CarouselTitle>{title}</CarouselTitle>
           </CarouselCollectionWrap>
         ))}
