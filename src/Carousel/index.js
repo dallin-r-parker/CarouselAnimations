@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { collection } from "../collection";
 import styled, {keyframes} from "styled-components";
 
 class Carousel extends Component {
   render() {
-    const { xActiveItem } = this.props;
+    const { xActiveItem, collection } = this.props;
+	  // console.count('Carousel render');
     return (
       <CarouselContainer>
         {collection.map(({ title, url }, i) => (
@@ -25,6 +25,7 @@ const CarouselContainer = styled.div`
   display: flex;
   overflow: hidden;
   background: #7d7d7d;
+  height: 322px;
 `;
 
 const CarouselCollectionWrap = styled.div`
@@ -33,7 +34,7 @@ const CarouselCollectionWrap = styled.div`
   justify-content: center;
 `;
 
-const CarouselGenre = styled.h3``;
+// const CarouselGenre = styled.h3``;
 
 const CarouselTitle = styled.h3`
   font-weight: 100;
@@ -48,18 +49,40 @@ const CarouselImg = styled.img`
   perspective: 1000px;
 `;
 
+// const animateFocusedItem = keyframes`
+//   from {
+//     height: 197px;
+//     width: 350px;
+//   }
+//   to {
+//     height: 253px;
+//     width: 450px;
+//   }
+// `;
+//
+// const animateBlurredItem = keyframes`
+//   from {
+//     height: 253px;
+//     width: 450px;
+//   }
+//   to {
+//     height: 197px;
+//     width: 350px;
+//   }
+// `;
+
 const animateFocusedItem = keyframes`
   from {
     transform: scale(1);
   }
   to {
-    transform: scale(1.3)
+    transform: scale(1.2)
   }
 `;
 
 const animateBlurredItem = keyframes`
   from {
-    transform: scale(1.3);
+    transform: scale(1.2);
   }
   to {
     transform: scale(1)
@@ -75,24 +98,3 @@ const animateBlurredItem = keyframes`
 //   box-shadow: 0 2px 100px 0 #000000;
 // `;
 
-// const animateFocusedItem = keyframes`
-//   from {
-//     height: 197px;
-//     width: 350px;
-//   }
-//   to {
-//     height: 253px;
-//     width: 450px;
-//   }
-// `;
-
-// const animateBlurredItem = keyframes`
-//   from {
-//     height: 253px;
-//     width: 450px;
-//   }
-//   to {
-//     height: 197px;
-//     width: 350px;
-//   }
-// `;
