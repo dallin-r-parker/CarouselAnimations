@@ -5,6 +5,10 @@ import styled from "styled-components";
 // import CSSanimation from "./CSSanimations";
 import { collection } from "./collection";
 import { Rx } from 'rxjs/Rx'
+import {
+  CSSTransition,
+  TransitionGroup,
+} from 'react-transition-group';
 
 
 const pixelsPerSeconds = v => ms => v * ms / 1000;
@@ -25,7 +29,7 @@ class App extends Component {
 			firstFetch: true,
 			ball: null
 		};
-
+		this.something$ = null
 		this.removeCarouselItem = this.removeCarouselItem.bind(this);
 	}
 	componentDidMount() {
