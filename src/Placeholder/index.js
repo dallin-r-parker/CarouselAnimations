@@ -1,12 +1,21 @@
-import React, { Component } from 'react'
+// @flow
+//! look into adding flow-typed for 3rd party libs
+import * as React from 'react';
 
-export default class Placeholder extends Component {
+type Props = {
+  height?: string,
+  width?: string,
+  bgColor?: Array<string>,
+  content?: Object
+}
+
+class Placeholder extends React.Component<Props> {
   render() {
     return (
       <div>
-        I'm just a place holder
-        <button>click me</button>
+        Hello Everyone
       </div>
     )
   }
-}
+};
+export default Placeholder;

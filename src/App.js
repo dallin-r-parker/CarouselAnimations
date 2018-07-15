@@ -1,14 +1,14 @@
+// @flow
 import React, {Component} from "react";
 import {CanvasBlur} from './Canvas';
-import {
-  CSSTransition,
-  TransitionGroup,
-} from 'react-transition-group';
+import { CSSTransition,TransitionGroup } from 'react-transition-group';
 import { BallAnimation } from './RxJSAnimation';
+import Placeholder from './Placeholder';
+import Toggle from './Toggle';
 
 const pixelsPerSeconds = v => ms => v * ms / 1000;
-
-class App extends Component {
+type Props = {}
+class App extends Component<Props> {
 	constructor() {
 	  super();
 	}
@@ -16,7 +16,9 @@ class App extends Component {
 
 	render() {
 		return (
-			<BallAnimation/>
+				<Toggle>
+					<button>Hello</button>
+				</Toggle>
 		)
 	}
 }

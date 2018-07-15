@@ -18,7 +18,8 @@
   "devDependencies": {
     "docz": "latest",
     "docz-theme-default": "^0.5.8",
-    "flow-bin": "^0.76.0"
+    "flow-bin": "^0.76.0",
+    "flow-typed": "^2.5.1"
   },
   "scripts": {
     "docz:dev": "docz dev",

@@ -1,4 +1,5 @@
 {
   "workbench.colorTheme": "React Ocean Next Extended",
   "git.ignoreLimitWarning": true,
+  "javascript.validate.enable": false
 }
