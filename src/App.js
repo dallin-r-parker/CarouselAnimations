@@ -4,7 +4,7 @@ import {
   CSSTransition,
   TransitionGroup,
 } from 'react-transition-group';
-
+import { BallAnimation } from './RxJSAnimation';
 
 const pixelsPerSeconds = v => ms => v * ms / 1000;
 
@@ -16,7 +16,7 @@ class App extends Component {
 
 	render() {
 		return (
-			<CanvasBlur/>
+			<BallAnimation/>
 		)
 	}
 }
