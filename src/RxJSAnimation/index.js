@@ -5,8 +5,8 @@ class BallAnimation extends Component {
   constructor() {
     super();
     this.lerp = this.lerp.bind(this);
-    this.$animation = interval(0, Scheduler.animationFrame)
-    this.$smoothMove = this.$animation.withLatestFrom(this.$smoothMove, (frame, move) => move);
+    // this.$animation = interval(0, Scheduler.animationFrame)
+    // this.$smoothMove = this.$animation.withLatestFrom(this.$smoothMove, (frame, move) => move);
   }
   styles = {
     height: '100px',
@@ -16,13 +16,13 @@ class BallAnimation extends Component {
   }
 
   lerp(start, end) {
-      const dx = end.x - start.x;
-      const dy = end.y - start.y;
-    
-      return {
-        x: start.x + dx * 0.1,
-        y: start.y + dy * 0.1,
-      };
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+
+    return {
+      x: start.x + dx * 0.1,
+      y: start.y + dy * 0.1,
+    };
   }
 
   render() {
