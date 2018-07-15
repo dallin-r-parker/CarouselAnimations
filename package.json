@@ -15,8 +15,13 @@
     "rxjs-compat": "^6.2.1",
     "styled-components": "3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "docz": "latest",
+    "docz-theme-default": "^0.5.8"
+  },
   "scripts": {
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
